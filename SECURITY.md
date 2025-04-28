@@ -14,7 +14,7 @@ currently being supported with security updates.
 
 
 
-#Reporting a Vulnerability
+# Reporting a Vulnerability
 
 If you discover a security vulnerability in this project, report it immediately through the following process:
 
