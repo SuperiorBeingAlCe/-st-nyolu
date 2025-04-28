@@ -3,7 +3,7 @@ If you want to contribute to this project, you’ll follow the rules, no excepti
 Here, there’s no room for amateurism, ego wars, or nonsense.
 Quality, logic, discipline — that's the only language spoken here.
 
-1. Communication Style
+#1. Communication Style
 No ad hominem (personal attacks), ideas are debated, not people.
 
 Drop the "I feel like" nonsense, bring evidence and logic.
