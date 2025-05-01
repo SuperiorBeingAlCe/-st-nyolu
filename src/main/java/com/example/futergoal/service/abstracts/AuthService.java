@@ -4,5 +4,5 @@ import com.example.futergoal.dto.DtoLoginRequest;
 
 public interface AuthService {
 	
-	 public String authenticateAndGenerateToken(DtoLoginRequest loginRequest); 
+	  public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException ; 
 }
