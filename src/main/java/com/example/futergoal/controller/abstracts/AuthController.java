@@ -6,7 +6,7 @@ import com.example.futergoal.entities.User;
 
 public interface AuthController {
 	
-	public String authenticateUser(@RequestBody User user);
+	public String authenticateUser(@RequestBody DtoLoginRequest loginRequest);
 	
 	
 }
