@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.example.futergoal.entities.User;
 import com.example.futergoal.repository.UserRepository;
 import com.example.futergoal.service.abstracts.AuthService;
 
+@Service
 public class AuthServiceImpl implements AuthService{
 	
 
