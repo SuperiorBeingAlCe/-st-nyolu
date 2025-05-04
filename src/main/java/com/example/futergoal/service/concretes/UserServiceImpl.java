@@ -62,7 +62,14 @@ public class UserServiceImpl implements UserService {
 		
 		} else {
 			throw new BaseException(new ErrorMessage(MessageType.NO_CITY_EXIST, null));
-		}
+		}	
+		
+		if(title.isPresent()) {
+			user.setTitle(title.get());
+		}else {
+			throw new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null));
+		}	
+		
 		 Title defaultTitle = titleRepository.findByName("beginner")
 		            .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null)));
 		    user.setTitle(defaultTitle);
@@ -257,4 +264,8 @@ public class UserServiceImpl implements UserService {
 		
 		return dtoUser;
 	}
+
+
+	
+	
 }
