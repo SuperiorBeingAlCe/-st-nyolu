@@ -1,14 +1,25 @@
 package com.example.futergoal.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.futergoal.service.abstracts.AuthService;
 
 @Configuration	
 public class SecurityConfig  {
-	  @Autowired
-	    CustomUserDetailsService userDetailsService;
+	 
+	 @Autowired
+	    AuthService userDetailsService;
 	    @Autowired
 	    private AuthEntryPointJwt unauthorizedHandler;
 	    @Bean
@@ -23,10 +34,10 @@ public class SecurityConfig  {
 	    }
 	    @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	        // Updated configuration for Spring Security 6.x
+	       
 	        http
-	                .csrf(csrf -> csrf.disable()) // Disable CSRF
-	                .cors(cors -> cors.disable()) // Disable CORS (or configure if needed)
+	                .csrf(csrf -> csrf.disable()) 
+	                .cors(cors -> cors.disable()) 
 	                .exceptionHandling(exceptionHandling ->
 	                        exceptionHandling.authenticationEntryPoint(unauthorizedHandler)
 	                )
@@ -35,14 +46,23 @@ public class SecurityConfig  {
 	                )
 	                .authorizeHttpRequests(authorizeRequests ->
 	                        authorizeRequests
-	                                .requestMatchers("/api/auth/**", "/api/test/all").permitAll() // Use 'requestMatchers' instead of 'antMatchers'
+	                                .requestMatchers("/rest/api/user/save", "/api/test/all", "/api/auth/signin").permitAll() 
 	                                .anyRequest().authenticated()
-	                );
-	        // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter
+	               )
+	                .authenticationProvider(authenticationProvider());
+	        
 	        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	        return http.build();
 	    }
-
+	    @Bean
+	    public DaoAuthenticationProvider authenticationProvider() {
+	        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+	        authProvider.setUserDetailsService(userDetailsService);  
+	        authProvider.setPasswordEncoder(passwordEncoder());
+	        return authProvider;
+	    }
+	    
+	    //--------------------
 	    @Bean
 	    public PasswordEncoder passwordEncoder(){
 	        return new BCryptPasswordEncoder();
