@@ -35,7 +35,7 @@ public class User {
 	private Long id;
 
 	@Column(name = "user_name", nullable = false)
-	private String userName;
+	private String username;
 
 	@Column(name = "first_name", nullable = false)
 	private String firstName;
