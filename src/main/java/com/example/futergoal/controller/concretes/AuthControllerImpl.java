@@ -18,7 +18,7 @@ import com.example.futergoal.security.JwtUtil;
 import com.example.futergoal.service.abstracts.AuthService;
 
 @RestController
-@RequestMapping("/rest/api/auth")
+@RequestMapping("/api/auth")
 public class AuthControllerImpl implements AuthController{
 	 @Autowired
 	    AuthenticationManager authenticationManager;
