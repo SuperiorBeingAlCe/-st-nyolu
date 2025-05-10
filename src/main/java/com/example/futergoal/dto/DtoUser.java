@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DtoUser {
 
-	private String userName;
+	private String username;
 
 	private String title;
 	private String city;
