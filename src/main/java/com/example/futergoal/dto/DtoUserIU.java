@@ -19,7 +19,7 @@ public class DtoUserIU {
 	@NotBlank(message = "kullanıcı adı boş bırakılamaz")
 	@Size(min = 5, max = 20)
 	@NotNull
-	private String userName;
+	private String username;
 
 	
 	@NotNull
@@ -61,11 +61,9 @@ public class DtoUserIU {
 	private Integer points;
 
 	@NotNull
-	@NotBlank
 	private Integer maxPoints;
 
 	@NotNull
-	@NotBlank
 	private Integer level;
 
 	@NotNull
