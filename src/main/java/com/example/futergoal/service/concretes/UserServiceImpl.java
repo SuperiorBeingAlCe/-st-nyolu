@@ -25,6 +25,8 @@ import com.example.futergoal.repository.TitleRepository;
 import com.example.futergoal.repository.UserRepository;
 import com.example.futergoal.service.abstracts.UserService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserServiceImpl implements UserService {
 	
@@ -49,45 +51,53 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
+	@Transactional
 	public DtoUser saveUser(DtoUserIU dtoUserIU) {
-		DtoUser response = new DtoUser();
-		User user = new User();
+		  City city = cityRepository.findById(dtoUserIU.getCityId())
+			        .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_CITY_EXIST, null)));
 
-		Optional<City> city = cityRepository.findById(dtoUserIU.getCityId());
+			    Title defaultTitle = titleRepository.findByName("BEGINNER")
+			        .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null)));
 
-		Optional<Title> title = titleRepository.findById(dtoUserIU.getTitleId());
+			    Role defaultRole = roleRepository.findByName("USER")
+			        .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_ROLE_EXIST, null)));
 
-		if (city.isPresent() ) {
-			user.setCity(city.get());
-		
-		} else {
-			throw new BaseException(new ErrorMessage(MessageType.NO_CITY_EXIST, null));
-		}	
-		
-		if(title.isPresent()) {
-			user.setTitle(title.get());
-		}else {
-			throw new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null));
-		}	
-		
-		 Title defaultTitle = titleRepository.findByName("beginner")
-		            .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null)));
-		    user.setTitle(defaultTitle);
-		
-		Role defaultRole = roleRepository.findByName("USER")
-				.orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_ROLE_EXIST, null)));
-		user.setRole(defaultRole);
-		
-		 user.setPassword(passwordEncoder.encode(dtoUserIU.getPassword()));
+			    User user = new User();
+			    user.setUsername(dtoUserIU.getUsername());
+			    user.setFirstName(dtoUserIU.getFirstName());
+			    user.setLastName(dtoUserIU.getLastName());
+			    user.setEmail(dtoUserIU.getEmail());
+			    user.setPassword(passwordEncoder.encode(dtoUserIU.getPassword()));
+			    user.setSignature(dtoUserIU.getSignature());
+			    user.setDetail(dtoUserIU.getDetail());
+			    user.setPoints(dtoUserIU.getPoints());
+			    user.setMaxPoint(dtoUserIU.getMaxPoints());
+			    user.setLevel(dtoUserIU.getLevel());
 
-		BeanUtils.copyProperties(dtoUserIU, user);
+			    user.setCity(city);
+			    user.setTitle(defaultTitle);
+			    user.setRole(defaultRole);
 
-		User dtoUser = userRepository.save(user);
+			  			    if (dtoUserIU.getTitles() != null && !dtoUserIU.getTitles().isEmpty()) {
+			        List<Title> titles = new ArrayList<>();
+			        for (DtoTitle dtoTitle : dtoUserIU.getTitles()) {
+			            Title title = titleRepository.findByName(dtoTitle.getName())
+			                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null)));
+			            titles.add(title);
+			        }
+			        user.setTitles(titles);
+			    }
 
-		BeanUtils.copyProperties(dtoUser, response);
-		return response;
+			    User savedUser = userRepository.save(user);
 
-	}
+			    DtoUser response = new DtoUser();
+			    BeanUtils.copyProperties(savedUser, response);
+			    response.setRoleName(savedUser.getRole().getName());
+			    response.setCity(savedUser.getCity().getName());
+			    response.setTitle(savedUser.getTitle().getName());
+
+			    return response;
+			}
 
 	@Override
 	public List<DtoUser> getAllUsers() {
@@ -148,8 +158,8 @@ public class UserServiceImpl implements UserService {
 				throw new BaseException(new ErrorMessage(MessageType.NO_TITLE_EXIST, null));
 			}
 
-			if (dtoUserIU.getUserName() != null) {
-				dbUser.setUserName(dtoUserIU.getUserName());
+			if (dtoUserIU.getUsername() != null) {
+				dbUser.setUsername(dtoUserIU.getUsername());
 			}
 
 			if (dtoUserIU.getFirstName() != null) {
