@@ -7,6 +7,8 @@ import com.example.futergoal.dto.DtoUserIU;
 
 public interface UserService {
 
+	
+	
 	public DtoUser saveUser(DtoUserIU dtoUserIU);
 
 	public List<DtoUser> getAllUsers();

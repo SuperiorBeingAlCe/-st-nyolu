@@ -9,9 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +19,7 @@ public class DtoUserIU {
 	@NotBlank(message = "kullanıcı adı boş bırakılamaz")
 	@Size(min = 5, max = 20)
 	@NotNull
-	private String userName;
+	private String username;
 
 	
 	@NotNull
@@ -63,11 +61,9 @@ public class DtoUserIU {
 	private Integer points;
 
 	@NotNull
-	@NotBlank
 	private Integer maxPoints;
 
 	@NotNull
-	@NotBlank
 	private Integer level;
 
 	@NotNull
